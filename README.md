@@ -1,2 +1,2 @@
 # mind-meadow
-Something for Dimentia Patients.
+Something for Dementia Patients.
