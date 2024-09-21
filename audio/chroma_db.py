@@ -23,7 +23,6 @@ def store_in_chroma(collection, text, embedding, timestamp):
         ids=[str(timestamp)],
     )
 
-
 # Query Chroma for recent conversation embeddings
 def query_chroma(collection, time_threshold):
     results = collection.get(where={"timestamp": {"$gte": time_threshold}})

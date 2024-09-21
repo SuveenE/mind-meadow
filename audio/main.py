@@ -1,5 +1,5 @@
 import time
-from query_database import summarize_conversation
+from llm import summarize_conversation
 from chroma_db import get_chroma_client, create_chroma_collection, query_chroma
 from embed_text import process_and_store_chroma
 from datetime import datetime, timedelta
