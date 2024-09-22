@@ -4,10 +4,16 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
+<<<<<<< HEAD
 from pydantic import BaseModel
 
 class AudioRequest(BaseModel):
     query: str
+=======
+from video.face_verification import find_face_name 
+from PIL import Image
+from io import BytesIO
+>>>>>>> e65feb5 (fix backend)
 
 app = FastAPI()
 
@@ -35,10 +41,22 @@ async def query(request: AudioRequest):
 @app.post("/process-image")
 async def process_image(file: UploadFile = File(...)):
     print("processing!!")
-    contents = await file.read()
-    nparr = np.frombuffer(contents, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    # Process the image with OpenCV (e.g., convert to grayscale)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Perform additional image processing tasks here
+        # Read the file as bytes
+    file_bytes = await file.read()
+
+    # Open the image with PIL
+    image = Image.open(BytesIO(file_bytes))
+
+    # Save the image locally
+    output_path = "video/tmp.jpg"
+    image.save(output_path)
+    find_face_name(output_path)
+    
+    # contents = await file.read()
+    # nparr = np.frombuffer(contents, np.uint8)
+    # img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    # # Process the image with OpenCV (e.g., convert to grayscale)
+    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # # Perform additional image processing tasks here
+
     return {"status": "Image received and processed"}
