@@ -1,5 +1,5 @@
 import os
-from chroma_db import store_in_chroma
+# from chroma_db import store_in_chroma
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -15,6 +15,6 @@ def embed_text(text):
     )
     return response.data[0].embedding
 
-def process_and_store_chroma(text, timestamp, chroma_collection):
-    embedding = embed_text(text)
-    store_in_chroma(chroma_collection, text, embedding, timestamp)
+# def process_and_store_chroma(text, timestamp, chroma_collection):
+    # embedding = embed_text(text)
+    # store_in_chroma(chroma_collection, text, embedding, timestamp)

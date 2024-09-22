@@ -1,6 +1,7 @@
 import PersonCard from "../components/personCard";
 import LocationCard from "../components/locationCard";
 import ConversationCard from "../components/conversationCard";
+import WebCamera from "../components/WebCamera";
 
 export default function Home() {
   return (
@@ -25,6 +26,11 @@ export default function Home() {
               image_url="/suveen.jpeg"
               details="Hello"
             />
+            <PersonCard
+              name="Dexter"
+              image_url="/suveen.jpeg"
+              details="Hello"
+            />
           </div>
         </div>
       </div>
@@ -45,6 +51,14 @@ export default function Home() {
             />
           </div>
         </div> */}
+      </div>
+      <div className="flex flex-row gap-8 mt-8">
+        <div className="flex flex-col gap-2 w-1/2">
+          <p className="mr-2 text-xl font-semibold tracking-tight my-2">Live Camera View</p>
+          <div>
+            <WebCamera/>
+          </div>
+        </div>
       </div>
     </div>
   );
