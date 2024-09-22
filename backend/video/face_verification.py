@@ -36,15 +36,28 @@ from PIL import Image
 
 
 def find_face_name(image_array):
-    dfs = DeepFace.find(
-        # img_path="video/test_images/taylor_swift1.png",
-        image_array,
-        db_path = "video/test_images2",
-    )
-    if len(dfs[0]["identity"]):
-        print(dfs[0]["identity"][0])
-    else:
-        print("no matches found")
+    try:
+        dfs = DeepFace.find(
+            # img_path="video/test_images/taylor_swift1.png",
+            image_array,
+            # db_path = "video/test_images2",
+            db_path = "video/face_images",
+        )
+        if len(dfs[0]["identity"]):
+            print(dfs[0]["identity"][0])
+            path = dfs[0]["identity"][0]
+            name_start_index = path.rfind('/') + 1
+            name_end_index = path.rfind('.')
+            name = path[name_start_index:name_end_index]
+            print("name", name)
+            return name
+
+        else:
+            print("no matches found")
+            return ""
+    except Exception as e:
+        print("Failed to find face")
+        return ""
 
 
 
@@ -57,4 +70,4 @@ img.save("video/tmp.png","PNG")
 # img_pil = Image.open("image.jpg")
 # np.array(Image.open(image_path))
 
-find_face_name("video/tmp.png")
+find_face_name("video/face_images/suveen.png")
