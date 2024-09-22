@@ -31,6 +31,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    print("getting health check request")
+    return {"status": "OK"}
+
 @app.post("/process-image")
 async def process_image(file: UploadFile = File(...)):
     print("processing!!")

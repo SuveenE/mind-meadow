@@ -15,7 +15,7 @@ import io from 'socket.io-client';
 
 // const socketRef = io('http://localhost:8000'); // Your backend URL
 
-export default function Page() {
+export default function WebCamera() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef(null);
 
@@ -42,31 +42,42 @@ export default function Page() {
     //   socket.emit('frame', imageData);
     // }, 100); // Send every 100ms
 
-    // const captureAndSendFrame = () => {
-    //   if (videoRef.current && canvasRef.current) {
-    //     const context = canvasRef.current.getContext('2d');
-    //     context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-    //     const imageData = canvasRef.current.toDataURL('image/jpeg');
-    //     console.log("imageData", imageData)
-    //     // socketRef.current.emit('frame', imageData);
-    //   }
-    // };
+    const captureAndSendFrame = () => {
+      if (videoRef.current && canvasRef.current) {
+        const context = canvasRef.current.getContext('2d');
+        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        print("draw image")
+        // const imageData = canvasRef.current.toDataURL('image/jpeg');
+        // console.log("imageData", imageData)
+        canvasRef.current.toBlob(blob => {
+          const formData = new FormData();
+          print("blog send post")
+          formData.append('image', blob, 'frame.jpg');
 
-    // const interval = setInterval(captureAndSendFrame, 1000 / 30); // 30 fps
-
-    const interval = setInterval(() => {
-      const context = canvasRef.current.getContext('2d');
-      context.drawImage(videoRef.current, 0, 0, 640, 480);
-      canvasRef.current.toBlob(blob => {
-        const formData = new FormData();
-        formData.append('image', blob, 'frame.jpg');
-
-        fetch('http://localhost:8000/process-image', {
-          method: 'POST',
-          body: formData,
-        });
+          fetch('http://localhost:8000/process-image', {
+            method: 'POST',
+            body: formData,
+          });
       }, 'image/jpeg');
-    }, 100);
+        
+      }
+    };
+
+    const interval = setInterval(captureAndSendFrame, 1000 / 30); // 30 fps
+
+    // const interval = setInterval(() => {
+    //   const context = canvasRef.current.getContext('2d');
+    //   context.drawImage(videoRef.current, 0, 0, 640, 480);
+    //   canvasRef.current.toBlob(blob => {
+    //     const formData = new FormData();
+    //     formData.append('image', blob, 'frame.jpg');
+
+    //     fetch('http://localhost:8000/process-image', {
+    //       method: 'POST',
+    //       body: formData,
+    //     });
+    //   }, 'image/jpeg');
+    // }, 100);
     
 
 
