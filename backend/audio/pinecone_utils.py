@@ -1,12 +1,12 @@
 from datetime import datetime
-from audio.embed_text import embed_text
+from embed_text import embed_text
 from pinecone import Pinecone
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-index = pc.Index("memory")
+index = pc.Index("demo")
 
 def store_in_pinecone(text):
     embedding = embed_text(text)
@@ -41,7 +41,7 @@ def query_pinecone(time_threshold=30):
             
             # Convert time_threshold to a comparable datetime if it's a timestamp (adjust if necessary)
             # Assuming time_threshold is a Unix timestamp, convert it to datetime for comparison
-            if item_timestamp.timestamp() >= time_threshold:
+            if item_timestamp.timestamp() >= datetime.now().timestamp() + time_threshold:
                 filtered_results.append(item)
         except ValueError as e:
             print(f"Error parsing timestamp: {e}")
@@ -69,3 +69,4 @@ def get_all_embeddings_stuff(index):
     results = index.describe_index_stats()
     return results
 
+print(query_pinecone())
