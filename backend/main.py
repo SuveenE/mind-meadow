@@ -4,16 +4,13 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
-<<<<<<< HEAD
 from pydantic import BaseModel
-
-class AudioRequest(BaseModel):
-    query: str
-=======
 from video.face_verification import find_face_name 
 from PIL import Image
 from io import BytesIO
->>>>>>> e65feb5 (fix backend)
+
+class AudioRequest(BaseModel):
+    query: str
 
 app = FastAPI()
 
