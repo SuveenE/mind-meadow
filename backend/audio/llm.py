@@ -18,7 +18,7 @@ def summarize_conversation(conversation, query):
             },
             {
                 "role": "user",
-                "content": f"Summarize the key topic from the following conversation (5 words or less) to help the user recall what they were told: {conversation}. The most recent words uttered is {query}",
+                "content": f"Summarize the most recent topic from the following conversation (2 words or less) to help the user recall what they were told: {conversation}. The most recent words uttered is {query}",
             },
         ],
         max_tokens=1024,
