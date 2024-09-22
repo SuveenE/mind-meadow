@@ -51,7 +51,7 @@ export default function WebCamera() {
 
     };
 
-    const interval = setInterval(captureAndSendFrame, 1000 / 30); // 30 fps
+    const interval = setInterval(captureAndSendFrame, 1000 / 250); // 4 fps
 
     // const interval = setInterval(() => {
     //   const context = canvasRef.current.getContext('2d');
