@@ -7,8 +7,7 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-def summarize_conversation(texts):
-    conversation = " ".join(texts)
+def summarize_conversation(conversation, query):
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -19,7 +18,7 @@ def summarize_conversation(texts):
             },
             {
                 "role": "user",
-                "content": f"Summarize the key details from the following conversation in one sentence (10 words or less) to help the user recall what they were told: {conversation}",
+                "content": f"Summarize the key topic from the following conversation (5 words or less) to help the user recall what they were told: {conversation}. The most recent words uttered is {query}",
             },
         ],
         max_tokens=1024,

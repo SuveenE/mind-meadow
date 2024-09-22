@@ -15,7 +15,7 @@ const ConversationCard = ({ text, time }: Props) => {
     <>
       <Card
         onClick={() => setOpen(true)}
-        className="p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300 h-min w-72 ml-1 mr-3 rounded-md shrink-0 overflow-hidden shadow-md"
+        className="p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300 h-min w-48 ml-1 mr-3 rounded-md shrink-0 overflow-hidden shadow-md"
       >
         <CardContent className="p-0 ml-3">
           <CardTitle className="mt-3 text-base">
