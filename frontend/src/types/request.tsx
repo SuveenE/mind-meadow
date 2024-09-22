@@ -1,5 +1,5 @@
 export interface AudioRequest {
-  audio: string;
+  query: string;
 }
 
 export interface VideoRequest {
