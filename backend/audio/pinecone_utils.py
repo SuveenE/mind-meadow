@@ -1,12 +1,12 @@
 from datetime import datetime
-from embed_text import embed_text
+from audio.embed_text import embed_text
 from pinecone import Pinecone
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-index = pc.Index("demo")
+index = pc.Index("memory")
 
 def store_in_pinecone(text):
     embedding = embed_text(text)

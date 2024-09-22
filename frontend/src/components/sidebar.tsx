@@ -49,8 +49,8 @@ const SideBar = () => {
   const sidebarItems = [
     { icon: HomeIcon, label: "Home", path: "/" },
     { icon: DatabaseBackupIcon, label: "Recall", path: "/recall" },
-    { icon: ChartNoAxesCombinedIcon, label: "Analytics", path: "/analytics" },
     { icon: DatabaseZapIcon, label: "Memory", path: "/memory" },
+    { icon: ChartNoAxesCombinedIcon, label: "Analytics", path: "/analytics" },
     { icon: SettingsIcon, label: "Settings", path: "/settings" },
     { icon: HelpCircleIcon, label: "Help", path: "/help" },
   ];

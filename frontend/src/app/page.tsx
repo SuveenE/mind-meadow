@@ -239,7 +239,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen p-12 gap-4">
       <div className="flex flex-row gap-4">
         <p className="mr-2 text-md font-semibold tracking-tight">
-          Hello Suveen 👋!{" "}
+          Hello 👋!{" "}
         </p>
         <div
           onClick={() => setIsRecording(true)}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardTitle } from "./ui/card";
-import { PlusIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "lucide-react";
 
 const AddPersonCard = () => {
   const [open, setOpen] = useState(false);
