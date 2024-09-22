@@ -8,8 +8,10 @@ const SERVICE_ENDPOINT = "query";
 
 export async function queryMemory(input: AudioRequest) {
   try {
+    console.log('input', input)
     const response = await axios.post(`${BACKEND_URL}/${SERVICE_ENDPOINT}`, input);
-    return response
+    console.log('response', response.data)
+    return response.data
   } catch (error) {
     console.error(error);
     throw error;

@@ -32,15 +32,15 @@ def read_transcription():
         return ""
 
 def main():
-    if not run_sst_script():
-        logging.error("Failed to run sst.py. Exiting.")
-        return
+    # if not run_sst_script():
+    #     logging.error("Failed to run sst.py. Exiting.")
+    #     return
     
     # Initialize ChromaDB client and create a collection
     client = get_chroma_client()
     collection = create_chroma_collection(client)
 
-    text = read_transcription 
+    text = "I want to buy banana, milk and bread from the supermarker today."
     timestamp = time.time()
     
     # Store the embedding and text in ChromaDB

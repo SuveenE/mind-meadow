@@ -1,7 +1,7 @@
 openai
 chromadb
 python-dotenv
-
+pydantic
 deepface
 fastapi 
 uvicorn

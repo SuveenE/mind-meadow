@@ -11,9 +11,12 @@ declare global {
     webkitSpeechRecognition: any;
   }
 }
+let SpeechRecognition: any;
 
-const SpeechRecognition =
-  window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+if (typeof window !== 'undefined') {
+  SpeechRecognition =
+    window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+}
 
 export default function Recall() {
   const [isRecording, setIsRecording] = useState(false);
@@ -57,28 +60,16 @@ export default function Recall() {
     if (mediaRecorder) {
       mediaRecorder.stop();
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        const audioBase64 = await convertBlobToBase64(audioBlob);
-        console.log("audio 64", audioBase64);
-        // Send base64 string to an endpoint
-        await sendAudioToServer(transcript);
-        setAudioChunks([]); // Reset chunks for the next recording
+        await sendAudioToServer();
       };
     }
   };
 
-  const convertBlobToBase64 = (blob: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob); // This converts the Blob to a base64 string
-    });
-  };
-
-  const sendAudioToServer = async (audioBase64: string) => {
+  const sendAudioToServer = async () => {
     try {
-      const response = await queryMemory({ audio: audioBase64 });
+      const response = await queryMemory({ query: transcript });
+      console.log('repsonse', response)
+      setAnswer(response)
       if (!response) {
         throw new Error("Failed to send audio to server");
       }
@@ -136,6 +127,7 @@ export default function Recall() {
       >
         {isRecording ? <StopCircleIcon size={60} /> : <MicIcon size={60} />}
       </div>
+      {/* <div onClick={stopRecording}>Recall</div> */}
       {transcript && (
         <div className="mt-4 p-2 border border-gray-400 rounded w-full max-w-lg">
           <p className="mt-2">Q:{" "}{transcript}</p>
