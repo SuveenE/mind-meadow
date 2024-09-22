@@ -1,14 +1,3 @@
-// // import Image from "next/image";
-
-// // export default function Home() {
-// //   return (
-// //     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-// //       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-// //       </main>
-// //     </div>
-// //   );
-// // }
-
 "use client"
 import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
@@ -43,24 +32,23 @@ export default function WebCamera() {
     // }, 100); // Send every 100ms
 
     const captureAndSendFrame = () => {
-      if (videoRef.current && canvasRef.current) {
-        const context = canvasRef.current.getContext('2d');
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-        print("draw image")
-        // const imageData = canvasRef.current.toDataURL('image/jpeg');
-        // console.log("imageData", imageData)
-        canvasRef.current.toBlob(blob => {
-          const formData = new FormData();
-          print("blog send post")
-          formData.append('image', blob, 'frame.jpg');
+      console.log("captureAndSendFrame");
+      const context = canvasRef.current.getContext('2d');
+      context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      // print("draw image")
+      // const imageData = canvasRef.current.toDataURL('image/jpeg');
+      // console.log("imageData", imageData)
+      canvasRef.current.toBlob(blob => {
+        const formData = new FormData();
+        console.log("toBlob")
+        formData.append('file', blob, 'frame.jpg');
 
-          fetch('http://localhost:8000/process-image', {
-            method: 'POST',
-            body: formData,
-          });
+        fetch('http://localhost:8000/process-image', {
+          method: 'POST',
+          body: formData,
+        });
       }, 'image/jpeg');
-        
-      }
+
     };
 
     const interval = setInterval(captureAndSendFrame, 1000 / 30); // 30 fps
@@ -91,48 +79,52 @@ export default function WebCamera() {
     };
   }, []);
 
+  // return (
+  //   <div>
+  //     <h1>Webcam Stream</h1>
+  //     <video ref={videoRef} autoPlay playsInline />
+  //   </div>
+  // );
+  
   return (
     <div>
-      <h1>Webcam Stream</h1>
-      <video ref={videoRef} autoPlay playsInline />
+      <video ref={videoRef} autoPlay style={{ width: '400px', height: '300px' }} />
+      <canvas ref={canvasRef} style={{ display: 'none' }} width="400" height="300"></canvas>
     </div>
   );
 }
 
-
 // "use client"
-// // components/WebcamSocket.js
+// // VideoStream.js
 // import React, { useRef, useEffect } from 'react';
-// import io from 'socket.io-client';
 
-// const socket = io('http://localhost:8000'); // Your backend URL
-
-// export default function Page() {
+// const WebCamera = () => {
 //   const videoRef = useRef(null);
-//   const canvasRef = useRef(null);
 
 //   useEffect(() => {
-//     // Access webcam
-//     navigator.mediaDevices.getUserMedia({ video: true })
-//       .then(stream => {
+//     // Request access to the webcam
+//     navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+//       .then((stream) => {
+//         // Set the video element's source to the webcam stream
 //         videoRef.current.srcObject = stream;
+//       })
+//       .catch((err) => {
+//         console.error('Error accessing the camera: ', err);
 //       });
-
-//     // Capture frames at intervals
-//     const interval = setInterval(() => {
-//       const context = canvasRef.current.getContext('2d');
-//       context.drawImage(videoRef.current, 0, 0, 640, 480);
-//       const imageData = canvasRef.current.toDataURL('image/jpeg');
-//       socket.emit('frame', imageData);
-//     }, 100); // Send every 100ms
-
-//     return () => clearInterval(interval);
 //   }, []);
 
 //   return (
-//     <>
-//       <video ref={videoRef} autoPlay style={{ display: 'none' }} />
-//       <canvas ref={canvasRef} width={640} height={480} style={{ display: 'none' }} />
-//     </>
+//     <video
+//       ref={videoRef}
+//       autoPlay
+//       playsInline
+//       style={{ width: '640px', height: '480px' }}
+//     />
 //   );
 // };
+
+// export default WebCamera;
+
+
+
+
