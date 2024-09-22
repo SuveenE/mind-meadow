@@ -1,5 +1,6 @@
 "use client"
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
 import io from 'socket.io-client';
 
 // const socketRef = io('http://localhost:8000'); // Your backend URL
@@ -7,6 +8,7 @@ import io from 'socket.io-client';
 export default function WebCamera() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef(null);
+  const [nameString, setNameString] = useState(''); 
 
   useEffect(() => {
     async function getMedia() {
@@ -35,23 +37,47 @@ export default function WebCamera() {
       console.log("captureAndSendFrame");
       const context = canvasRef.current.getContext('2d');
       context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-      // print("draw image")
-      // const imageData = canvasRef.current.toDataURL('image/jpeg');
       // console.log("imageData", imageData)
+      // canvasRef.current.toBlob(blob => {
+      //   const formData = new FormData();
+      //   console.log("toBlob")
+      //   formData.append('file', blob, 'frame.jpg');
+
+      //   fetch('http://localhost:8000/process-image', {
+      //     method: 'POST',
+      //     body: formData,
+      //   });
+      // }, 'image/jpeg');
+
       canvasRef.current.toBlob(blob => {
         const formData = new FormData();
-        console.log("toBlob")
+        console.log("toBlob");
         formData.append('file', blob, 'frame.jpg');
-
+      
         fetch('http://localhost:8000/process-image', {
           method: 'POST',
           body: formData,
+        })
+        .then(response => {
+          if (!response.ok) {
+            setNameString('')
+            throw new Error('Network response was not ok');
+          }
+          return response.json(); // Assuming your FastAPI backend returns a JSON response
+        })
+        .then(data => {
+          console.log('Response data:', data);
+          // Handle the response data here (e.g., update the UI)
+          setNameString(data["name"])
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
         });
       }, 'image/jpeg');
 
     };
 
-    const interval = setInterval(captureAndSendFrame, 1000 / 250); // 4 fps
+    const interval = setInterval(captureAndSendFrame, 2000); // 4 fps
 
     // const interval = setInterval(() => {
     //   const context = canvasRef.current.getContext('2d');
@@ -90,6 +116,8 @@ export default function WebCamera() {
     <div>
       <video ref={videoRef} autoPlay style={{ width: '400px', height: '300px' }} />
       <canvas ref={canvasRef} style={{ display: 'none' }} width="400" height="300"></canvas>
+      <p>Matched Name</p>
+      <p>{nameString}</p>
     </div>
   );
 }

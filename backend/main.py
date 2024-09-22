@@ -47,7 +47,7 @@ async def process_image(file: UploadFile = File(...)):
     # Save the image locally
     output_path = "video/tmp.jpg"
     image.save(output_path)
-    find_face_name(output_path)
+    found_path = find_face_name(output_path)
     
     # contents = await file.read()
     # nparr = np.frombuffer(contents, np.uint8)
@@ -55,5 +55,5 @@ async def process_image(file: UploadFile = File(...)):
     # # Process the image with OpenCV (e.g., convert to grayscale)
     # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # # Perform additional image processing tasks here
-
-    return {"status": "Image received and processed"}
+    return {"name": found_path}
+    # return {"status": "Image received and processed"}
