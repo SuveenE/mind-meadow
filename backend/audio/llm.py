@@ -28,14 +28,12 @@ def summarize_conversation(texts):
 
 
 # This function can be called using a wake word. Ex: Hey "MindBuddy" I can't remember what my mother wanted me to get
-def recall_things(query, texts):
+def recall_things_answer(conversation, query):
     """
     Parameters:
     query (str): The user's query which shows what the user wants to recall.
     texts (list of str): A list of conversation strings that are related to the query.
     """
-
-    conversation = " ".join(texts)
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
