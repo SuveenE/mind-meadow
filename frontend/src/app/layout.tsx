@@ -50,7 +50,7 @@ export default function RootLayout({
       >
           <div className="flex flex-row h-screen">
             <SideBar />{" "}
-            <div className="ml-[200px] h-full overflow-y-auto flex-grow">
+            <div className="ml-[240px] h-full overflow-y-auto flex-grow">
               {children}
             </div>
           </div>
