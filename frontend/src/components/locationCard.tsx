@@ -18,7 +18,7 @@ const LocationCard = ({ name, image_url, details }: Props) => {
     <>
       <Card
         onClick={() => setOpen(true)}
-        className="p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300 h-40 w-64 ml-1 mr-3 rounded-xl shrink-0 overflow-hidden shadow-md"
+        className="p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300 h-44 w-64 ml-1 mr-3 rounded-xl shrink-0 overflow-hidden shadow-md"
       >
         <CardContent className="p-0">
           <div className="w-full h-28 overflow-hidden">
@@ -33,6 +33,7 @@ const LocationCard = ({ name, image_url, details }: Props) => {
           <CardTitle className="mt-3 text-base text-center">
             {name}
           </CardTitle>
+          <p className="text-center text-xs">Last checked: {details}</p>
         </CardContent>
       </Card>
       <Modal
