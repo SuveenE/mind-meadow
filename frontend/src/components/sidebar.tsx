@@ -8,7 +8,9 @@ import {
   SettingsIcon,
   ScrollTextIcon,
   LucideIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  DatabaseBackupIcon,
+  DatabaseZapIcon
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -31,7 +33,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   return (
     <div
       className={`flex flex-row p-3 py-[5px] gap-3 rounded-md hover:bg-slate-200 cursor-pointer items-center ${
-        isActive ? "bg-indigo-200" : "bg-gray-50"
+        isActive ? "bg-gray-300" : "bg-gray-50"
       }`}
       onClick={() => router.push(path)}
     >
@@ -45,9 +47,10 @@ const SideBar = () => {
   const pathname = usePathname();
 
   const sidebarItems = [
-    { icon: HomeIcon, label: "Home", path: "/home" },
+    { icon: HomeIcon, label: "Home", path: "/" },
+    { icon: DatabaseBackupIcon, label: "Recall", path: "/recall" },
     { icon: ChartNoAxesCombinedIcon, label: "Analytics", path: "/analytics" },
-    // { icon: ScrollTextIcon, label: "Subscription", path: "/subscription" },
+    { icon: DatabaseZapIcon, label: "Memory", path: "/memory" },
     { icon: SettingsIcon, label: "Settings", path: "/settings" },
     { icon: HelpCircleIcon, label: "Help", path: "/help" },
   ];
