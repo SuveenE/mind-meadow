@@ -69,4 +69,3 @@ def get_all_embeddings_stuff(index):
     results = index.describe_index_stats()
     return results
 
-print(query_pinecone())
