@@ -1,19 +1,18 @@
-from audio.pinecone_utils import query_pinecone, recall_things
-from audio.llm import recall_things_answer
+from audio.pinecone_utils import query_pinecone, recall_things, store_in_pinecone
+from audio.llm import recall_things_answer, summarize_conversation
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
-<<<<<<< HEAD
 from pydantic import BaseModel
 
-class AudioRequest(BaseModel):
-    query: str
-=======
 from video.face_verification import find_face_name 
 from PIL import Image
 from io import BytesIO
->>>>>>> e65feb5 (fix backend)
+
+
+class AudioRequest(BaseModel):
+    query: str
 
 app = FastAPI()
 
@@ -36,6 +35,14 @@ async def health_check():
 async def query(request: AudioRequest):
     results = recall_things(request.query)
     topic = recall_things_answer(results, request.query)
+    return topic
+
+@app.post("/process-audio")
+async def process_convo(request: AudioRequest):
+    print('request', request.query)
+    store_in_pinecone(request.query)
+    results = query_pinecone()
+    topic = summarize_conversation(results, request.query)
     return topic
 
 @app.post("/process-image")

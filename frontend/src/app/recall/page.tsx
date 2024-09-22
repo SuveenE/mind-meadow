@@ -129,11 +129,13 @@ export default function Recall() {
       </div>
       {/* <div onClick={stopRecording}>Recall</div> */}
       {transcript && (
-        <div className="mt-4 p-2 border border-gray-400 rounded w-full max-w-lg">
+        <div className="mt-4 p-2 border border-gray-400 bg-red-100 rounded w-full max-w-lg">
           <p className="mt-2">Q:{" "}{transcript}</p>
-          {answer && <p className="mt-2 font-medium">A:{" "}{answer}</p>}
         </div>
       )}
+      {transcript && answer&& <div className="p-2 border border-gray-400 bg-green-100 rounded w-full max-w-lg">
+         <p className="mt-2 font-medium">A:{" "}{answer}</p>
+        </div>}
     </div>
   );
 }
