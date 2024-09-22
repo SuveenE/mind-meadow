@@ -4,12 +4,12 @@ import { useState } from "react";
 import { Card, CardContent, CardTitle } from "./ui/card";
 
 interface Props {
-  key: number;
+  index: number;
   text: string;
   time: string;
 }
 
-const ConversationCard = ({ key, text, time }: Props) => {
+const ConversationCard = ({ index, text, time }: Props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [open, setOpen] = useState(false);
   return (
@@ -17,7 +17,7 @@ const ConversationCard = ({ key, text, time }: Props) => {
       <Card
         onClick={() => setOpen(true)}
         className={`p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300 h-min w-48 ml-1 mr-3 rounded-md shrink-0 overflow-hidden shadow-md ${
-          key === 0 ? "bg-red-500" : ""
+          index === 0 ? "bg-green-100" : ""
         }`}
       >
         <CardContent className="p-0 ml-3">

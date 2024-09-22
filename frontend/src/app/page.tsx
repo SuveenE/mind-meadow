@@ -60,7 +60,6 @@ export default function Home() {
 
         // Ensure base64 string is complete
         if (base64String && base64String.startsWith('data:image/jpeg;base64,')) {
-          console.log('base64String', base64String)
           setImageString(base64String); // Set the Base64 string
         }
       
@@ -219,14 +218,14 @@ useEffect(() => {
 
   return (
     <div className="flex flex-col min-h-screen p-12 gap-4">
-      <div className="flex flex-row gap-4"><p className="mr-2 text-md font-semibold tracking-tight">Hello Suveen 👋! </p><div onClick={() => setIsRecording(true)} className="ml-3 w-[110px] cursor-pointer text-xs p-2 bg-indigo-200 rounded-md">Start Recording</div></div>
+      <div className="flex flex-row gap-4"><p className="mr-2 text-md font-semibold tracking-tight">Hello Suveen 👋! </p><div onClick={() => setIsRecording(true)} className="ml-3 w-[110px] cursor-pointer text-xs p-2 bg-indigo-200 rounded-md">{!isRecording ? "Start Recording" : "Recording"}</div></div>
       <div className="flex flex-row gap-8">
         <div className="flex flex-col gap-2 w-2/5">
           <p className="mr-2 text-xl font-semibold tracking-tight my-2">Recent Location</p>
           <div>
             <LocationCard
               name="Studio45, San Francisco"
-              image_url="/sf.webp"
+              image_url="/studio45.jpeg"
               details="SF"
             />
           </div>
@@ -237,8 +236,8 @@ useEffect(() => {
           {persons.slice().reverse().map((person, index) => (
             <PersonCard
               name={person.name}
-              image_url={person.image_url}
-              details="H"
+              image_url={`/${person.name}.jpeg`}
+              details=""
             />
           ))}
           </div>
@@ -251,6 +250,7 @@ useEffect(() => {
           {conversations.slice().reverse().map((conversation, index) => (
               <ConversationCard
                 key={index}
+                index={index}
                 text={conversation.name}
                 time={conversation.time}
               />
