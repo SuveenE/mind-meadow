@@ -25,6 +25,11 @@ export default function Home() {
               image_url="/suveen.jpeg"
               details="Hello"
             />
+            <PersonCard
+              name="Dexter"
+              image_url="/suveen.jpeg"
+              details="Hello"
+            />
           </div>
         </div>
       </div>
