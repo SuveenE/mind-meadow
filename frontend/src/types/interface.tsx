@@ -1,7 +1,7 @@
 export interface Person {
   name: string;
   image_url: string;
-  details: string;
+  details?: string;
 }
 
 export interface Location {

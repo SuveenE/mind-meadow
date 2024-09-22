@@ -2,10 +2,10 @@
 import PersonCard from "../components/personCard";
 import LocationCard from "../components/locationCard";
 import ConversationCard from "../components/conversationCard";
-import WebCamera from "../components/WebCamera";
 import { useEffect, useRef, useState } from "react";
 import { processAudio } from "../actions/audio/process";
-import { Conversation } from "../types/interface";
+import { Conversation, Person } from "../types/interface";
+
 
 declare global {
   interface Window {
@@ -22,6 +22,7 @@ if (typeof window !== 'undefined') {
 
 export default function Home() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [persons, setPersons] = useState<Person[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
@@ -34,12 +35,98 @@ export default function Home() {
   const [answer, setAnswer] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const transcriptRef = useRef(transcript); // Create a ref for the transcript
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef(null);
+  const [nameString, setNameString] = useState(''); 
+  const [imageString, setImageString] = useState('')
+
+  useEffect(() => {
+    async function getMedia() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (err) {
+        console.error('Error accessing camera: ', err);
+      }
+    }
+    getMedia();
+
+    const captureAndSendFrame = () => {
+      const context = canvasRef.current.getContext('2d');
+      context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      const base64String = canvasRef.current.toDataURL('image/jpeg', 1.0);
+
+        // Ensure base64 string is complete
+        if (base64String && base64String.startsWith('data:image/jpeg;base64,')) {
+          console.log('base64String', base64String)
+          setImageString(base64String); // Set the Base64 string
+        }
+      
+
+      canvasRef.current.toBlob(blob => {
+        // const reader = new FileReader();
+        //   reader.onloadend = () => {
+        //     const base64String = reader.result as string; // Convert to Base64 string
+        //     console.log('Base64 String:', base64String);
+        //     setImageString(base64String)
+        //     // You can now save base64String as needed
+        //   };
+        //   reader.readAsDataURL(blob); 
+
+        const formData = new FormData();
+        formData.append('file', blob, 'frame.jpg');
+      
+        fetch('http://localhost:8000/process-image', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => {
+          if (!response.ok) {
+            setNameString('')
+            throw new Error('Network response was not ok');
+          }
+          return response.json(); // Assuming your FastAPI backend returns a JSON response
+        })
+        .then(data => {
+          if(data["name"]){setPersons((prevPersons: Person[]) => {
+            // Check if the name already exists
+            const exists = prevPersons.some(person => person.name === data["name"]);
+            if (!exists) {
+              return [
+                ...prevPersons,
+                { name: data["name"], image_url: imageString },
+              ];
+            }
+            return prevPersons; // Return unchanged if the name exists
+          });
+          setNameString(data["name"])}
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+      }, 'image/jpeg');
+
+    };
+
+    const interval = setInterval(captureAndSendFrame, 2000); // 4 fps
+
+
+    return () => {
+      // Clean up the stream when component unmounts
+      if (videoRef.current && videoRef.current.srcObject) {
+        const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+        tracks.forEach((track) => track.stop());
+      }
+      clearInterval(interval);
+    };
+  }, []);
 
 useEffect(() => {
   transcriptRef.current = transcript; // Update the ref whenever transcript changes
 }, [transcript]);
 
-  console.log("transcript", transcript)
 
   useEffect(() => {
     if (isRecording) {
@@ -147,16 +234,13 @@ useEffect(() => {
         <div className="flex flex-col gap-2 w-3/5">
         <p className="mr-2 text-xl font-semibold tracking-tight my-2">People around you</p>
           <div>
+          {persons.slice().reverse().map((person, index) => (
             <PersonCard
-              name="Suveen"
-              image_url="/suveen.jpeg"
-              details="Hello"
+              name={person.name}
+              image_url={person.image_url}
+              details="H"
             />
-            <PersonCard
-              name="Dexter"
-              image_url="/suveen.jpeg"
-              details="Hello"
-            />
+          ))}
           </div>
         </div>
       </div>
@@ -188,7 +272,10 @@ useEffect(() => {
         <div className="flex flex-col gap-2 w-1/2">
           <p className="mr-2 text-xl font-semibold tracking-tight my-2">Live Camera View</p>
           <div>
-            {/* <WebCamera/> */}
+          <div>
+      <video ref={videoRef} autoPlay style={{ width: '400px', height: '300px' }} />
+      <canvas ref={canvasRef} style={{ display: 'none' }} width="400" height="300"></canvas>
+    </div>
           </div>
         </div>
       </div>
